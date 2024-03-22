@@ -1,4 +1,3 @@
-
 drop schema if exists irisbisuteria;
 
 create database irisbisuteria;
@@ -105,6 +104,7 @@ create table orderDetail(
 	idOrderDetail int not null auto_increment,
     quantity int not null,
     subTotal int not null,
+    maxQuantity int not null,
     idProduct varchar(50) not null,
     idOrder varchar(50) not null,
     primary key (idOrderDetail),
@@ -113,8 +113,9 @@ create table orderDetail(
 );
 
 create table workList(
-	idWorkList int not null auto_increment,
+	idWorkList varchar(50) not null unique,
     listName varchar(50) not null,
+    total int not null,
     creationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     idCardWorker int not null,
     idState int not null,
@@ -125,9 +126,20 @@ create table workList(
 
 create table listDetail(
 	idListDateil int not null auto_increment,
-    idWorkList int not null,
+    quantity int not null,
+    subTotal int not null,
+    idWorkList varchar(50) not null,
     idProduct varchar(50) not null,
     primary key (idListDateil),
     foreign key (idWorkList) references workList(idWorkList),
     foreign key (idProduct) references products(idProduct)
+);
+
+create table orderList(
+	idOrderList int not null auto_increment,
+    idOrder varchar(50) not null,
+    idWorkList varchar(59) not null,
+    primary key (idOrderList),
+    foreign key (idWorkList) references workList(idWorkList),
+    foreign key (idOrder) references orders(idOrder)
 );
