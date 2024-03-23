@@ -28,8 +28,8 @@ class OrderModel {
                 if (err) {
                   reject(err);
                 } else {
-                  const detailOrderSql = 'INSERT INTO orderDetail(quantity, subTotal, idProduct, idOrder) VALUES ?';
-                  const detailOrderValues = details.map(detail => [detail.quantity, detail.subTotal, detail.idProduct,orderId]);
+                  const detailOrderSql = 'INSERT INTO orderDetail(quantity, subTotal, maxQuantity, idProduct, idOrder) VALUES ?';
+                  const detailOrderValues = details.map(detail => [detail.quantity, detail.subTotal, detail.maxQuantity, detail.idProduct,orderId]);
                   db.query(detailOrderSql, [detailOrderValues], (err, result) => {
                     if (err) {
                       reject(err);
