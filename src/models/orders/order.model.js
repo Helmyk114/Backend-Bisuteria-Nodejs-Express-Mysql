@@ -77,7 +77,7 @@ class OrderModel {
   //Modelo para obtener el detalle de una orden según su id
   async getOrderId(idOrder) {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT OD.idOrder, P.image, P.nameProduct, OD.maxQuantity, P.laborPrice FROM orderDetail OD inner join products P on OD.idProduct = P.idProduct WHERE idOrder = ? AND maxQuantity > 0';
+      const sql = 'SELECT OD.idOrder, P.idProduct, P.image, P.nameProduct, OD.maxQuantity, P.laborPrice FROM orderDetail OD inner join products P on OD.idProduct = P.idProduct WHERE idOrder = ? AND maxQuantity > 0';
       db.query(sql, idOrder, (err, result) => {
         if (err) {
           reject(err);
