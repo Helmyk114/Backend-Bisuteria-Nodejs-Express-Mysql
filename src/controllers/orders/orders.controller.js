@@ -22,7 +22,6 @@ async function createOrder(req, res) {
         idCardClient: idCardClient,
         details: details
       };
-
       try {
         const result = await OrderModel.createOrder(infoOrder);
         res.json(result)
@@ -33,7 +32,7 @@ async function createOrder(req, res) {
   } catch (error) {
     console.log({ data: `Internal Server Error2: ${error}` });
 		res.status(500).json({ error: 'Internal Server Error (createOrder3)' });
-  }
+  };
 };
 
 //Controlador para obtener todos los pedidos según su estado

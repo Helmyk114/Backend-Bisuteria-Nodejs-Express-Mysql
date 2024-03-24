@@ -29,7 +29,7 @@ class OrderModel {
                   reject(err);
                 } else {
                   const detailOrderSql = 'INSERT INTO orderDetail(quantity, subTotal, maxQuantity, idProduct, idOrder) VALUES ?';
-                  const detailOrderValues = details.map(detail => [detail.quantity, detail.subTotal, detail.maxQuantity, detail.idProduct,orderId]);
+                  const detailOrderValues = details.map(detail => [detail.quantity, detail.subTotal, detail.maxQuantity, detail.idProduct, orderId]);
                   db.query(detailOrderSql, [detailOrderValues], (err, result) => {
                     if (err) {
                       reject(err);
@@ -77,7 +77,7 @@ class OrderModel {
   //Modelo para obtener el detalle de una orden según su id
   async getOrderId(idOrder) {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT OD.idOrder, P.image, P.nameProduct, OD.quantity FROM orderDetail OD inner join products P on OD.idProduct=P.idProduct WHERE idOrder = ?';
+      const sql = 'SELECT OD.idOrder, P.image, P.nameProduct, OD.maxQuantity, P.laborPrice FROM orderDetail OD inner join products P on OD.idProduct = P.idProduct WHERE idOrder = ? AND maxQuantity > 0';
       db.query(sql, idOrder, (err, result) => {
         if (err) {
           reject(err);
