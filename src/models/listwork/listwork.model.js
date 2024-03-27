@@ -5,7 +5,7 @@ class ListworkModel {
   async createListwork(listworkInfo) {
     return new Promise((resolve, reject) => {
       const { idWorkList, listName, total, idCardWorker, idState, details } = listworkInfo;
-      // console.log('info Front:',listworkInfo)
+
       const sql = 'INSERT INTO workList (idWorkList, listName, total ,idCardWorker, idState ) VALUES (?,?,?,?,?)';
       db.query(sql, [idWorkList, listName, total, idCardWorker, idState], (err, result) => {
         if (err) {
@@ -22,7 +22,6 @@ class ListworkModel {
                 return;
               }
               const listWorkId = row[0].idWorkList;
-              console.log(listWorkId)
               //Filtrar el array de details para incluir en la lista de trabajo solo los productos que tienen una cantidad mayor o igual a 1
               const filteredDetails = details.filter(detail => parseInt(detail.quantity) > 0);
               //Ingresar los datos filtrados con el ID de la última listWork a la base de datos
@@ -41,14 +40,12 @@ class ListworkModel {
                           reject(err);
                         } else {
                           resolve(result);
-                          console.log('detalle Ordenlista:',result);
                         }
                       });
                     }
                   })
                 });
-              })
-              );
+              }));
             }
           });
         }
@@ -70,7 +67,7 @@ class ListworkModel {
     });
   };
 
-  //Modelo para obtener las lsitas de trabajo según su estado y el id del trabajador
+  //Modelo para obtener las listas de trabajo según su estado y el id del trabajador
   async getListworkStatusIdCardWorker(idStatus, idCardWorker) {
     return new Promise((resolve, reject) => {
       const sql = 'SELECT WL.idWorkList, WL.listName FROM workList WL inner join worker W on WL.idCardWorker = W.idCardWorker WHERE WL.idState = ? AND W.idCardWorker = ?';
@@ -84,10 +81,11 @@ class ListworkModel {
     });
   };
 
-  async getListwork(idOrderDetail) {
+  //Modelo para obtener el detalle de una lista de trabajo según del id de la lista
+  async getDetailListWork(idWorkList) {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT idOrderDetail, quantity, subTotal, idProduct, idOrder FROM orderdetail ';
-      db.query(sql, idOrderDetail, (err, result) => {
+      const sql = 'SELECT  LD.idWorkList, P.image, P.nameProduct, LD.quantity, LD.subTotal, WL.total FROM listDetail LD inner join products P on LD.idProduct = P.idProduct inner join workList WL on LD.idWorkList = WL.idWorkList WHERE LD.idWorkList = ?';
+      db.query(sql, idWorkList, (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -96,6 +94,7 @@ class ListworkModel {
       });
     });
   };
+
 }
 
 module.exports = new ListworkModel();

@@ -58,18 +58,15 @@ async function getListworkStatusIdCardWorker(req, res) {
   }
 };
 
-async function getListwork(req, res) {
+//Controlador para obtener el detalle de una lista de trabajo según del id de la lista
+async function getDetailListWork(req, res) {
   try {
     const { idWorkList } = req.params;
-    const listworkInfo = await ListworkModel.getListwork(idWorkList);
-    if (infoClient.length < 1) {
-      res.json()
-    } else {
-      res.json({ data: listworkInfo });
-    }
+    const listworkInfo = await ListworkModel.getDetailListWork(idWorkList);
+    res.json({ data: listworkInfo });
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.log({ data: `Internal Server Error (getListwork): ${error}` });
+    res.status(500).json({ error: 'Internal Server Error (getListwork)' });
   };
 };
 
@@ -77,5 +74,5 @@ module.exports = {
   createListwork,
   getListworkStatus,
   getListworkStatusIdCardWorker,
-  getListwork
+  getDetailListWork
 }
