@@ -1,6 +1,5 @@
 const db = require("../../dataBase/db");
 
-
 class Sign_inModel {
   //Modelo para iniciar sesion
   async login(userName) {

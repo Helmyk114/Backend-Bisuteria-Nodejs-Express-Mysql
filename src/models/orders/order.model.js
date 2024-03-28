@@ -1,4 +1,5 @@
 const db = require("../../dataBase/db");
+const io = require("../../config/io")
 
 class OrderModel {
   //Modelo para crear una orden nueva, la ordencliente, y la ordenDetalle en la base de datos
@@ -34,6 +35,15 @@ class OrderModel {
                     if (err) {
                       reject(err);
                     } else {
+                      io.emit('newOrder', {
+                        idOrder,
+                        idCardWorker,
+                        total,
+                        idState,
+                        quantityProducts,
+                        idCardClient,
+                        details
+                      })
                       resolve(result);
                     }
                   });
@@ -64,7 +74,7 @@ class OrderModel {
   async getOrderStateIdCard(idState, idCardWorker) {
     return new Promise((resolve, reject) => {
       const sql = 'SELECT C.clientname, DATE_FORMAT(O.orderDate, "%Y-%m-%d") AS Date, O.idOrder, O.quantityProducts FROM orders O inner join orderClient OC on O.idOrder=OC.idOrder join client C on OC.idCardClient=C.idCardClient WHERE idState = ? AND idCardWorker = ?';
-      db.query(sql, [idState,idCardWorker], (err, result) => {
+      db.query(sql, [idState, idCardWorker], (err, result) => {
         if (err) {
           reject(err);
         } else {
