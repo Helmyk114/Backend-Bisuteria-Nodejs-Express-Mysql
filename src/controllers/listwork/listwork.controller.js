@@ -4,7 +4,7 @@ const ids = require('../../config/ids');
 //Controlador para crear un lista de trabajo
 async function createListwork(req, res) {
   try {
-    const { listName, total, idCardWorker, idState, details } = req.body;
+    const { listName, total, idCardWorker, idState, details, maxQuantity } = req.body;
     const table = 'workList';
     const condicion = 'idWorkList';
 
@@ -19,8 +19,10 @@ async function createListwork(req, res) {
         total: total,
         idCardWorker: idCardWorker,
         idState: idState,
-        details: details
+        details: details,
+        maxQuantity: maxQuantity
       };
+      console.log(listworkInfo)
       try {
         const result = await ListworkModel.createListwork(listworkInfo);
         res.json({ data: result });

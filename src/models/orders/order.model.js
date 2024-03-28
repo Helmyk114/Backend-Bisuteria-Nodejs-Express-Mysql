@@ -1,5 +1,4 @@
 const db = require("../../dataBase/db");
-const io = require("../../config/io")
 
 class OrderModel {
   //Modelo para crear una orden nueva, la ordencliente, y la ordenDetalle en la base de datos
@@ -35,15 +34,6 @@ class OrderModel {
                     if (err) {
                       reject(err);
                     } else {
-                      io.emit('newOrder', {
-                        idOrder,
-                        idCardWorker,
-                        total,
-                        idState,
-                        quantityProducts,
-                        idCardClient,
-                        details
-                      })
                       resolve(result);
                     }
                   });
@@ -54,6 +44,24 @@ class OrderModel {
         }
       });
     });
+  };
+
+  //Modelo para actualizar la cantidad maxima de una orden
+  async maxQuantityUpdate(infoQuantity) {
+    console.log('Hola que soy ', infoQuantity)
+    Promise.all(infoQuantity.map(quantity => {
+      return new Promise((resolve, reject) => {
+        const sql = 'UPDATE orderDetail SET maxQuantity = ? WHERE idProduct = ? AND idOrder = ?';
+        const sqlValues = [quantity.maxQuantity, quantity.idProduct, quantity.idOrder];
+        db.query(sql, sqlValues, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    }));
   };
 
   //Modelo para obtener los pedidos según su estado

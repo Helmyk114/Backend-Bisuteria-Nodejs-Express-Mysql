@@ -1,10 +1,11 @@
 const db = require('../../dataBase/db');
+const { maxQuantityUpdate } = require('../orders/order.model');
 
 class ListworkModel {
   //Modelo para crear una lista de trabajo
   async createListwork(listworkInfo) {
     return new Promise((resolve, reject) => {
-      const { idWorkList, listName, total, idCardWorker, idState, details } = listworkInfo;
+      const { idWorkList, listName, total, idCardWorker, idState, details, maxQuantity } = listworkInfo;
 
       const sql = 'INSERT INTO workList (idWorkList, listName, total ,idCardWorker, idState ) VALUES (?,?,?,?,?)';
       db.query(sql, [idWorkList, listName, total, idCardWorker, idState], (err, result) => {
@@ -39,6 +40,8 @@ class ListworkModel {
                         if (err) {
                           reject(err);
                         } else {
+                          const infoQuantityArray = Object.values(maxQuantity);
+                          maxQuantityUpdate(infoQuantityArray );
                           resolve(result);
                         }
                       });
