@@ -22,7 +22,7 @@ async function createListwork(req, res) {
         details: details,
         maxQuantity: maxQuantity
       };
-      console.log(listworkInfo)
+      
       try {
         const result = await ListworkModel.createListwork(listworkInfo);
         res.json({ data: result });
@@ -72,9 +72,25 @@ async function getDetailListWork(req, res) {
   };
 };
 
+//Controlador para cambiar el estado de una lista de trabajo
+async function updateStateWorkList(req,res) {
+  try {
+    const { idWorkList, idState } = req.params;
+    const result = await ListworkModel.updateStateWorkList(idWorkList, idState);
+    if (result.affectedRows === 0) {
+			res.json({ data: 'Error' });
+		} else {
+			res.json({ data: result });
+		}
+  } catch (err) {
+    console.log({ data: `Internal Server Error (updateStateWorkList): ${err}` });
+  };
+};
+
 module.exports = {
   createListwork,
   getListworkStatus,
   getListworkStatusIdCardWorker,
-  getDetailListWork
+  getDetailListWork,
+  updateStateWorkList
 }

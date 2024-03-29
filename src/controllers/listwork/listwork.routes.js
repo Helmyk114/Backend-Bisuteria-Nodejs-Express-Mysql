@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router()
-const { createListwork, getListwork, getListworkStatus, getListworkStatusIdCardWorker, getDetailListWork } = require("./listwork.controller");
+const { createListwork, getListwork, getListworkStatus, getListworkStatusIdCardWorker, getDetailListWork, updateStateWorkList } = require("./listwork.controller");
 
 router
         //Ruta para crear una lista de trabajo
@@ -15,5 +15,7 @@ router
         //Ruta para obtener el detalle de una lista de trabajo según del id de la lista
         .get('/detalleListaTrabajo/:idWorkList', getDetailListWork)
 
+        //Ruta para cambiar el estado de una lista de trabajo
+        .put('/listaTrabajo-CambiarEstado/:idWorkList/:idState', updateStateWorkList)
 
 module.exports = router;

@@ -99,6 +99,25 @@ class ListworkModel {
     });
   };
 
+  //Modelo para cambiar el estado de una lista de trabajo
+  async updateStateWorkList(idWorkList, idState){
+    return new Promise((resolve, reject) => {
+      const sql = 'UPDATE workList SET idstate = ? WHERE idWorkList = ?';
+      const sqlValues = [idState, idWorkList];
+      db.query(sql, sqlValues, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          if (result.affectedRows === 0) {
+            reject({ message: `No se encontró ninguna lista con ID: ${idWorkList}` });
+          } else {
+            resolve({ message: `Se ha actualizado el estado de la lista con ID: ${idWorkList}` });
+          }
+        }
+      });
+    });
+  };
+
 }
 
 module.exports = new ListworkModel();
