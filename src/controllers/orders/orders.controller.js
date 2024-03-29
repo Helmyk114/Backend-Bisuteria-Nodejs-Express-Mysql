@@ -56,6 +56,16 @@ async function getOrderStateIdCard(req,res) {
     console.log({ data: `Internal Server Error (getOrderStateId): ${err}` });
   }
 };
+//Controlador para obtener una orden segun dos estados y el id del trabajador
+async function getOrderStatesIdCard(req,res) {
+  try {
+    const { idState1, idState2, idCardWorker } = req.params;
+    const result = await OrderModel.getOrderStatesIdCard(idState1, idState2, idCardWorker);
+    res.json({ data: result });
+  } catch (err) {
+    console.log({ data: `Internal Server Error (getOrderStateId): ${err}` });
+  }
+};
 
 //Controlador para obtener el detalle de una orden según su id
 async function getOrderId(req, res) {
@@ -86,6 +96,7 @@ module.exports = {
   createOrder,
   getOrderState,
   getOrderStateIdCard,
+  getOrderStatesIdCard,
   getOrderId,
   cancelOrder
 }

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createOrder, getOrderState, getOrderStateIdCard, cancelOrder, getOrderId } = require('./orders.controller');
+const { createOrder, getOrderState, getOrderStateIdCard, cancelOrder, getOrderId, getOrderStatesIdCard } = require('./orders.controller');
 const router = express.Router();
 
 router
@@ -8,8 +8,10 @@ router
 
       //Ruta para obtener los pedidos según el estado
       .get('/orden/:idState1/:idState2', getOrderState)
-      //Ruta para obtener los pedidos según el esatdo y el id del vendedor
+      //Ruta para obtener los pedidos según el estado y el id del vendedor
       .get('/orden/:idState/:idCardWorker', getOrderStateIdCard)
+      //Ruta para obtener una orden segun dos estados y el id del trabajador
+      .get('/orden1/:idState1/:idState2/:idCardWorker', getOrderStatesIdCard)
       //Ruta para obtener el detalle de una orden según su id
       .get('/orden-CrearLista/:idOrder', getOrderId)
 
