@@ -38,8 +38,8 @@ async function createOrder(req, res) {
 //Controlador para obtener todos los pedidos según su estado
 async function getOrderState(req,res) {
   try {
-    const { idState } = req.params;
-    const result = await OrderModel.getOrderState(idState);
+    const { idState1, idState2 } = req.params;
+    const result = await OrderModel.getOrderState(idState1, idState2);
     res.json({ data: result });
   } catch (err) {
     console.log({ data: `Internal Server Error (getOrderState): ${err}` });

@@ -7,7 +7,7 @@ router
       .post('/orden', createOrder)
 
       //Ruta para obtener los pedidos según el estado
-      .get('/orden/:idState', getOrderState)
+      .get('/orden/:idState1/:idState2', getOrderState)
       //Ruta para obtener los pedidos según el esatdo y el id del vendedor
       .get('/orden/:idState/:idCardWorker', getOrderStateIdCard)
       //Ruta para obtener el detalle de una orden según su id

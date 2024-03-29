@@ -1,5 +1,5 @@
 const db = require('../../dataBase/db');
-const { maxQuantityUpdate, updateStateOrder } = require('../orders/order.model');
+const { maxQuantityUpdate, updateStateOrder, addMaxQuantity } = require('../orders/order.model');
 
 class ListworkModel {
   //Modelo para crear una lista de trabajo
@@ -8,13 +8,13 @@ class ListworkModel {
       const { idWorkList, listName, total, idCardWorker, idState, details, maxQuantity } = listworkInfo;
 
       const sql = 'INSERT INTO workList (idWorkList, listName, total ,idCardWorker, idState ) VALUES (?,?,?,?,?)';
-      db.query(sql, [idWorkList, listName, total, idCardWorker, idState], (err, result) => {
+      db.query(sql, [idWorkList, listName, total, idCardWorker, idState], async (err, result) => {
         if (err) {
           reject(err);
         } else {
           resolve(result);
           const getIdQuery = 'SELECT idWorkList FROM workList WHERE idCardWorker = ? AND listName = ? ORDER BY creationDate DESC LIMIT 1';
-          db.query(getIdQuery, [idCardWorker, listName], (err, row) => {
+          db.query(getIdQuery, [idCardWorker, listName], async (err, row) => {
             if (err) {
               reject(err);
             } else {
@@ -26,7 +26,7 @@ class ListworkModel {
               //Filtrar el array de details para incluir en la lista de trabajo solo los productos que tienen una cantidad mayor o igual a 1
               const filteredDetails = details.filter(detail => parseInt(detail.quantity) > 0);
               //Ingresar los datos filtrados con el ID de la última listWork a la base de datos
-              Promise.all(filteredDetails.map(detail => {
+              Promise.all(filteredDetails.map(async (detail) => {
                 return new Promise((resolve, reject) => {
                   const detailSql = 'INSERT INTO listDetail(quantity, subTotal, idWorkList, idProduct) VALUES (?,?,?,?)';
                   const detailValues = [detail.quantity, detail.subTotal, listWorkId, detail.idProduct];
@@ -36,13 +36,18 @@ class ListworkModel {
                     } else {
                       const detailOrderListSql = 'INSERT INTO orderList(idOrder, idWorkList) VALUES(?,?)';
                       const detailOrderListValues = [detail.idOrder, listWorkId];
-                      db.query(detailOrderListSql, detailOrderListValues, (err, result) => {
+                      db.query(detailOrderListSql, detailOrderListValues, async (err, result) => {
                         if (err) {
                           reject(err);
                         } else {
                           const infoQuantityArray = Object.values(maxQuantity);
-                          maxQuantityUpdate(infoQuantityArray );
-                          updateStateOrder(detail.idOrder, '2')
+                          maxQuantityUpdate(infoQuantityArray);
+                          const info = await addMaxQuantity(detail.idOrder);
+                          if(info == 0) {
+                            updateStateOrder(detail.idOrder, '2');
+                          } else {
+                            updateStateOrder(detail.idOrder, '7');
+                          }
                           resolve(result);
                         }
                       });
@@ -74,7 +79,7 @@ class ListworkModel {
   //Modelo para obtener las listas de trabajo según su estado y el id del trabajador
   async getListworkStatusIdCardWorker(idStatus, idCardWorker) {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT WL.idWorkList, WL.listName FROM workList WL inner join worker W on WL.idCardWorker = W.idCardWorker WHERE WL.idState = ? AND W.idCardWorker = ?';
+      const sql = 'SELECT WL.idWorkList, WL.listName, WL.total FROM workList WL inner join worker W on WL.idCardWorker = W.idCardWorker WHERE WL.idState = ? AND W.idCardWorker = ?';
       db.query(sql, [idStatus, idCardWorker], (err, result) => {
         if (err) {
           reject(err);

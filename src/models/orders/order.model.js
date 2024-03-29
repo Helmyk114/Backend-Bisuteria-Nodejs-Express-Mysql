@@ -64,12 +64,12 @@ class OrderModel {
   };
 
   //Modelo para obtener los pedidos según su estado
-  async getOrderState(idState) {
+  async getOrderState(idState1, idState2) {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT C.clientname, DATE_FORMAT(O.orderDate, "%Y-%m-%d") AS Date, O.idOrder, O.quantityProducts FROM orders O inner join orderClient OC on O.idOrder=OC.idOrder join client C on OC.idCardClient=C.idCardClient WHERE idState = ?';
-      db.query(sql, idState, (err, result) => {
+      const sql = 'SELECT C.clientname, DATE_FORMAT(O.orderDate, "%Y-%m-%d") AS Date, O.idOrder, O.quantityProducts FROM orders O inner join orderClient OC on O.idOrder=OC.idOrder join client C on OC.idCardClient=C.idCardClient WHERE idState = ? OR idState = ?';
+      db.query(sql, [idState1, idState2], (err, result) => {
         if (err) {
-          reject(err);
+          reject(err);  
         } else {
           resolve(result);
         }
@@ -136,6 +136,20 @@ class OrderModel {
           } else {
             resolve({ message: `Se ha actualizado el estado del producto con ID: ${idOrder}` });
           }
+        }
+      });
+    });
+  };
+
+  //Modelo para obtener la suma de productos de una orden
+  async addMaxQuantity(idOrder){
+    return new Promise((resolve, reject) => {
+      const sql = 'SELECT SUM(maxQuantity) AS total FROM orderDetail WHERE idOrder = ?';
+      db.query(sql, idOrder, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result[0].total);
         }
       });
     });
