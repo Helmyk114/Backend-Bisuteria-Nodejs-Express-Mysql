@@ -1,5 +1,5 @@
 const db = require('../../dataBase/db');
-const { maxQuantityUpdate } = require('../orders/order.model');
+const { maxQuantityUpdate, updateStateOrder } = require('../orders/order.model');
 
 class ListworkModel {
   //Modelo para crear una lista de trabajo
@@ -42,6 +42,7 @@ class ListworkModel {
                         } else {
                           const infoQuantityArray = Object.values(maxQuantity);
                           maxQuantityUpdate(infoQuantityArray );
+                          updateStateOrder(detail.idOrder, '2')
                           resolve(result);
                         }
                       });

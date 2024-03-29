@@ -48,7 +48,6 @@ class OrderModel {
 
   //Modelo para actualizar la cantidad maxima de una orden
   async maxQuantityUpdate(infoQuantity) {
-    console.log('Hola que soy ', infoQuantity)
     Promise.all(infoQuantity.map(quantity => {
       return new Promise((resolve, reject) => {
         const sql = 'UPDATE orderDetail SET maxQuantity = ? WHERE idProduct = ? AND idOrder = ?';
@@ -106,8 +105,26 @@ class OrderModel {
     });
   };
 
-  //Modelo para cambiar el estado de una order
+  //Modelo para cancelar una orden
   async cancelOrder(idOrder, idState) {
+    return new Promise((resolve, reject) => {
+      const sql = 'UPDATE orders SET idState = ? WHERE idOrder = ?';
+      db.query(sql, [idState, idOrder], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          if (result.affectedRows === 0) {
+            reject({ message: `No se encontró ningún producto con ID: ${idOrder}` });
+          } else {
+            resolve({ message: `Se ha actualizado el estado del producto con ID: ${idOrder}` });
+          }
+        }
+      });
+    });
+  };
+
+  //Modelo para cambiar el estado de una orden
+  async updateStateOrder(idOrder, idState){
     return new Promise((resolve, reject) => {
       const sql = 'UPDATE orders SET idState = ? WHERE idOrder = ?';
       db.query(sql, [idState, idOrder], (err, result) => {
