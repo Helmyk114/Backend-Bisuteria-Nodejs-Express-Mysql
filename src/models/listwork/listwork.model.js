@@ -1,4 +1,5 @@
 const db = require('../../dataBase/db');
+const { idOrder, orderList } = require('../orderList/orderList.models');
 const { maxQuantityUpdate, updateStateOrder, addMaxQuantity } = require('../orders/order.model');
 
 class ListworkModel {
@@ -109,13 +110,15 @@ class ListworkModel {
     return new Promise((resolve, reject) => {
       const sql = 'UPDATE workList SET idstate = ? WHERE idWorkList = ?';
       const sqlValues = [idState, idWorkList];
-      db.query(sql, sqlValues, (err, result) => {
+      db.query(sql, sqlValues, async (err, result) => {
         if (err) {
           reject(err);
         } else {
           if (result.affectedRows === 0) {
             reject({ message: `No se encontró ninguna lista con ID: ${idWorkList}` });
           } else {
+            const idOrders = await idOrder(idWorkList);
+            await orderList(idOrders);
             resolve({ message: `Se ha actualizado el estado de la lista con ID: ${idWorkList}` });
           }
         }

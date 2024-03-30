@@ -69,7 +69,7 @@ class OrderModel {
       const sql = 'SELECT C.clientname, DATE_FORMAT(O.orderDate, "%Y-%m-%d") AS Date, O.idOrder, O.quantityProducts FROM orders O inner join orderClient OC on O.idOrder=OC.idOrder join client C on OC.idCardClient=C.idCardClient WHERE idState = ? OR idState = ?';
       db.query(sql, [idState1, idState2], (err, result) => {
         if (err) {
-          reject(err);  
+          reject(err);
         } else {
           resolve(result);
         }
@@ -103,7 +103,7 @@ class OrderModel {
       });
     });
   };
-  
+
   //Modelo para obtener el detalle de una orden según su id
   async getOrderId(idOrder) {
     return new Promise((resolve, reject) => {
@@ -136,8 +136,22 @@ class OrderModel {
     });
   };
 
+  //Modelo para obtener la suma de productos de una orden
+  async addMaxQuantity(idOrder) {
+    return new Promise((resolve, reject) => {
+      const sql = 'SELECT SUM(maxQuantity) AS total FROM orderDetail WHERE idOrder = ?';
+      db.query(sql, idOrder, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result[0].total);
+        }
+      });
+    });
+  };
+
   //Modelo para cambiar el estado de una orden
-  async updateStateOrder(idOrder, idState){
+  async updateStateOrder(idOrder, idState) {
     return new Promise((resolve, reject) => {
       const sql = 'UPDATE orders SET idState = ? WHERE idOrder = ?';
       db.query(sql, [idState, idOrder], (err, result) => {
@@ -154,15 +168,20 @@ class OrderModel {
     });
   };
 
-  //Modelo para obtener la suma de productos de una orden
-  async addMaxQuantity(idOrder){
+  //Modelo para cambiar el estado de una orden cuando cambia el estado de todas las listas asociadas
+  async updateStateOrderAllWorList(idOrders, idState) {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT SUM(maxQuantity) AS total FROM orderDetail WHERE idOrder = ?';
-      db.query(sql, idOrder, (err, result) => {
+      const sql = 'UPDATE orders SET idState = ? WHERE idOrder IN (?)';
+      const sqlValues = idOrders.map(idOrder => idOrder.idOrder);
+      db.query(sql, [idState, sqlValues], (err, result) => {
         if (err) {
           reject(err);
         } else {
-          resolve(result[0].total);
+          if (result.affectedRows === 0) {
+            reject({ message: `No se encontró ningún producto con ID: ${idOrders}` });
+          } else {
+            resolve({ message: `Se ha actualizado el estado del producto con ID: ${idOrders}` });
+          }
         }
       });
     });
