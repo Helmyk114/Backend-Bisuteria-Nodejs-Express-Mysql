@@ -10,7 +10,7 @@ router
         // .get('/listaTrabajo/:idOrderDetail', getListwork)
         //Ruta para obtener las listas de trabajo según su estado
         .get('/listaTrabajo-Estado/:idState', getListworkStatus)
-        //Ruta para obtener las lsitas de trabajo según su estado y el id del trabajador
+        //Ruta para obtener las listas de trabajo según su estado y el id del trabajador
         .get('/listaTrabajo-Estado-Trabajador/:idState/:idCardWorker', getListworkStatusIdCardWorker)
         //Ruta para obtener el detalle de una lista de trabajo según del id de la lista
         .get('/detalleListaTrabajo/:idWorkList', getDetailListWork)

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createOrder, getOrderState, getOrderStateIdCard, cancelOrder, getOrderId, getOrderStatesIdCard } = require('./orders.controller');
+const { createOrder, getOrderState, getOrderStateIdCard, getOrderId, getOrderStatesIdCard, updateStateOrder } = require('./orders.controller');
 const router = express.Router();
 
 router
@@ -16,6 +16,6 @@ router
       .get('/orden-CrearLista/:idOrder', getOrderId)
 
       //Ruta para actualizar el estado de una orden
-      .put('/orden/cancelar/:idOrder/:idState', cancelOrder)
+      .put('/orden-CambiarEstado/:idOrder/:idState', updateStateOrder)
       
 module.exports = router;

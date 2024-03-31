@@ -118,24 +118,6 @@ class OrderModel {
     });
   };
 
-  //Modelo para cancelar una orden
-  async cancelOrder(idOrder, idState) {
-    return new Promise((resolve, reject) => {
-      const sql = 'UPDATE orders SET idState = ? WHERE idOrder = ?';
-      db.query(sql, [idState, idOrder], (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          if (result.affectedRows === 0) {
-            reject({ message: `No se encontró ningún producto con ID: ${idOrder}` });
-          } else {
-            resolve({ message: `Se ha actualizado el estado del producto con ID: ${idOrder}` });
-          }
-        }
-      });
-    });
-  };
-
   //Modelo para obtener la suma de productos de una orden
   async addMaxQuantity(idOrder) {
     return new Promise((resolve, reject) => {

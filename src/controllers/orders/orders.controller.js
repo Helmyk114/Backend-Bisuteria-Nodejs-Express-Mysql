@@ -78,17 +78,17 @@ async function getOrderId(req, res) {
   }
 }
 
-async function cancelOrder(req,res) {
+async function updateStateOrder(req,res) {
   try {
     const { idOrder, idState } = req.params;
-    const result = await OrderModel.cancelOrder(idOrder, idState);
+    const result = await OrderModel.updateStateOrder(idOrder, idState);
     if (result.affectedRows === 0) {
 			res.json({ data: 'Error' });
 		} else {
 			res.json({ data: result });
 		}
   } catch (err) {
-    console.log({ data: `Internal Server Error (cancelOrder): ${err}` });
+    console.log({ data: `Internal Server Error (updateStateOrder): ${err}` });
   }
 }
 
@@ -98,5 +98,5 @@ module.exports = {
   getOrderStateIdCard,
   getOrderStatesIdCard,
   getOrderId,
-  cancelOrder
+  updateStateOrder
 }
