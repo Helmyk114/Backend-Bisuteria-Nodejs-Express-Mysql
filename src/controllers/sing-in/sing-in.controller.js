@@ -1,6 +1,7 @@
 const SignInModel = require('../../models/sign-in/sign-in.model');
 const { comparePassword } = require('../../config/bcrypt');
 const jwt = require('../../config/jwt');
+const { loginIn } = require('../../config/Socket.io/ioEvent');
 
 //Controlador para iniciar sesion
 async function login(req, res) {
@@ -21,6 +22,7 @@ async function login(req, res) {
 			const idRole = user.idRole;
 			const token = jwt.generateJwtToken(idCardWorker, idRole);
 
+			loginIn({ message: `${userName} ha iniciado sesion` })
 			// Devuelve el token en la respuesta
 			res.json({ data: 'Inicio de sesión exitoso', token });
 		} else {

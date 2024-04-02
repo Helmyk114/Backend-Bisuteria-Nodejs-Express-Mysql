@@ -1,20 +1,13 @@
-const { app } = require('./src/app')
-const { Server } = require('socket.io')
-const http = require('http');
+const { server, io } = require('./src/config/Socket.io/io')
+const { app } = require('./src/app');
+const { initializeIO } = require('./src/config/Socket.io/ioEvent');
 
-const server = http.createServer(app);
+initializeIO(io);
 
-const httpServer = server.listen(app.get('port'), (err) => {
-	if (err) {
-		console.log(`Error startting the server: ${err}`)
-	} else {
-		console.log(`🚀The server is started on the port: ${app.get('port')}`)
-	}
-})
-//Socket initialization
-const io = new Server(httpServer, {
-	cors: {
-		origin: '*'
-	}
-})
-
+server.listen(app.get('port'), (err) => {
+  if (err) {
+    console.log(`Error startting the server: ${err}`);
+  } else {
+    console.log(`🚀The server is started on the port: ${app.get('port')}`);
+  }
+});

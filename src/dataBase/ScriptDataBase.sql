@@ -1,3 +1,4 @@
+
 drop schema if exists irisbisuteria;
 
 create database irisbisuteria;
@@ -19,7 +20,7 @@ create table state(
 );
 
 insert into state (states)
-	values('Creado'),('En proceso'),('Terminado'),('Activo'),('Inactivo'),('Cancelado');
+	values('Creado'),('Procesado'),('Terminado'),('Activo'),('Inactivo'),('Pagado'),('En proceso'),('Pago');
     
 create table products(
 	idProduct varchar(50) not null unique,
@@ -142,4 +143,13 @@ create table orderList(
     primary key (idOrderList),
     foreign key (idWorkList) references workList(idWorkList),
     foreign key (idOrder) references orders(idOrder)
+);
+
+create table notification(
+	idNotification int not null auto_increment,
+    title varchar(250) not null,
+    message varchar(500) not null,
+    idCardWorker int not null,
+    primary key (idNotification),
+    foreign key (idCardWorker) references worker(idCardWorker)
 );
