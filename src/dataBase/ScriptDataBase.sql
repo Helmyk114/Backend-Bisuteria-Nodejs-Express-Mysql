@@ -149,6 +149,7 @@ create table notification(
 	idNotification int not null auto_increment,
     title varchar(250) not null,
     message varchar(500) not null,
+    orderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     idCardWorker int not null,
     primary key (idNotification),
     foreign key (idCardWorker) references worker(idCardWorker)

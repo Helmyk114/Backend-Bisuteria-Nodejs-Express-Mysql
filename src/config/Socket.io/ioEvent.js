@@ -1,3 +1,5 @@
+const { createNotification } = require("../../controllers/notification/notification.controller");
+
 let ioInstance;
 
 exports.initializeIO = (io) => {
@@ -15,6 +17,7 @@ exports.loginIn = (message) => {
 exports.orders = (message) => {
   if(ioInstance) {
     ioInstance.emit('order:Server', message);
+    createNotification(message);
   } else {
     console.error('IO instance not initialized!');
   }

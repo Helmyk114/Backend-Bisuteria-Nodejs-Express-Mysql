@@ -3,7 +3,6 @@ const db = require('../../dataBase/db');
 class ClientModel {
   //Modelo para crear un cliente
   async createClient(clientInfo) {
-    console.log(clientInfo)
     return new Promise((resolve, reject) => {
       const sql = 'INSERT INTO client (idCardClient, clientname, clientAddress, clientPhone ) VALUES (?,?,?,?)';
       db.query(sql, Object.values(clientInfo), (err, result) => {

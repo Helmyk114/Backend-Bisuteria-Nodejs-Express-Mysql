@@ -10,17 +10,16 @@ function initServer(app) {
     }
   });
 
-    // Manejar conexiones de sockets entrantes
-    io.on('connection', (socket) => {
-      console.log('Un cliente se ha conectado');
+    // // Manejar conexiones de sockets entrantes
+    // io.on('connection', (socket) => {
+    //   console.log('Un cliente se ha conectado');
   
-      // Manejar desconexiones de sockets
-      socket.on('disconnect', () => {
-        console.log('Un cliente se ha desconectado');
-      });
-    });
+    //   // Manejar desconexiones de sockets
+    //   socket.on('disconnect', () => {
+    //     console.log('Un cliente se ha desconectado');
+    //   });
+    // });
 
- 
     return { server, io }; // Retornar tanto el servidor como el objeto 'io'
   };
   

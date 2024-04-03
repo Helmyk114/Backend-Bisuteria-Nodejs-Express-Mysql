@@ -1,10 +1,14 @@
 const OrderModel = require('../../models/orders/order.model');
 const ids = require('../../config/ids');
+const { orders } = require('../../config/Socket.io/ioEvent');
+const ClientModel = require('../../models/client/client.model');
 
 //Controlador para crear una orden
 async function createOrder(req, res) {
   try {
     const { idCardWorker, total, quantityProducts, idCardClient, details } = req.body;
+
+    const clientInfo = await ClientModel.getClient(idCardClient);
     const table = 'orders';
     const condicion = 'idOrder';
   
@@ -24,6 +28,7 @@ async function createOrder(req, res) {
       };
       try {
         const result = await OrderModel.createOrder(infoOrder);
+        orders({ title:'Nuevo pedido', message:`Se ha creado un nuevo pedido a nombre de ${clientInfo[0].clientname}`})
         res.json(result)
       } catch (error) {
         console.log({ data: `Internal Server Error (createOrder2): ${error}` });
