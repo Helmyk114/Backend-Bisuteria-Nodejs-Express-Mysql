@@ -25,8 +25,13 @@ exports.orders = (message) => {
 
 exports.listWork = (message) => {
   if (ioInstance) {
-    ioInstance.emit('listWork:Server', message);
-    createNotificationCraftman(message)
+    if (message.idCardWorker) {
+      ioInstance.emit('payList:Server', message)
+      createNotificationCraftman(message);
+    } else {
+      ioInstance.emit('listWork:Server', message);
+      createNotification(message);
+    }
   } else {
     console.error('IO instance not initialized!');
   }

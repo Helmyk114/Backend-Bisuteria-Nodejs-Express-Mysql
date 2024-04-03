@@ -126,6 +126,20 @@ class ListworkModel {
     });
   };
 
+   //Modelo para obtener el idCardWorker con el idWorkList
+   async getidCardWorkerListWork(idWorkList) {
+    return new Promise((resolve, reject) => {
+      const sql = 'SELECT  idCardWorker FROM workList WHERE idWorkList = ?';
+      db.query(sql, idWorkList, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  };
+
 }
 
 module.exports = new ListworkModel();
