@@ -20,7 +20,7 @@ create table state(
 );
 
 insert into state (states)
-	values('Creado'),('Procesado'),('Terminado'),('Activo'),('Inactivo'),('Pagado'),('En proceso'),('Pago');
+	values('Creado'),('Procesado'),('Terminado'),('Activo'),('Inactivo'),('Cancelar'),('En proceso'),('Pago');
     
 create table products(
 	idProduct varchar(50) not null unique,
