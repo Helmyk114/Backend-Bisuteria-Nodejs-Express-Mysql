@@ -1,4 +1,4 @@
-const { createNotification } = require("../../controllers/notification/notification.controller");
+const { createNotification, createNotificationCraftman } = require("../../controllers/notification/notification.controller");
 
 let ioInstance;
 
@@ -22,3 +22,12 @@ exports.orders = (message) => {
     console.error('IO instance not initialized!');
   }
 };
+
+exports.listWork = (message) => {
+  if (ioInstance) {
+    ioInstance.emit('listWork:Server', message);
+    createNotificationCraftman(message)
+  } else {
+    console.error('IO instance not initialized!');
+  }
+}

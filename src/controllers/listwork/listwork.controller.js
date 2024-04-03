@@ -1,5 +1,6 @@
 const ListworkModel = require('../../models/listwork/listwork.model');
 const ids = require('../../config/ids');
+const { listWork } = require('../../config/Socket.io/ioEvent');
 
 //Controlador para crear un lista de trabajo
 async function createListwork(req, res) {
@@ -25,6 +26,7 @@ async function createListwork(req, res) {
       
       try {
         const result = await ListworkModel.createListwork(listworkInfo);
+        listWork({ title:'Nueva Lista de Trabajo', message:`Se ha creado la lista de trabajo: ${listName}`, idCardWorker:idCardWorker});
         res.json({ data: result });
       } catch (error) {
         console.log({ data: `Internal Server Error (createListwork2): ${error}` });
