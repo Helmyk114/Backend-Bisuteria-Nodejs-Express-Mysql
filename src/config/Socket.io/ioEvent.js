@@ -1,4 +1,4 @@
-const { createNotification, createNotificationCraftman } = require("../../controllers/notification/notification.controller");
+const { createNotification, createNotificationCraftman, createNotificationSeller } = require("../../controllers/notification/notification.controller");
 
 let ioInstance;
 
@@ -8,7 +8,7 @@ exports.initializeIO = (io) => {
 
 //Función para emitir una notification cuando un usuario inicia sesión
 exports.loginIn = (message) => {
-  if(ioInstance) {
+  if (ioInstance) {
     ioInstance.emit('login:Server', message);
   } else {
     console.error('IO instance not initialized!');
@@ -17,9 +17,25 @@ exports.loginIn = (message) => {
 
 //Función para emitir una notification cuando se crea una orden
 exports.orders = (message) => {
-  if(ioInstance) {
+  if (ioInstance) {
     ioInstance.emit('order:Server', message);
     createNotification(message);
+  } else {
+    console.error('IO instance not initialized!');
+  }
+};
+
+//Funciones para emitir una notification cuando se termina una orden a un administrator
+exports.finishOrderAdmin = (message) => {
+  if (ioInstance) {
+    if (message.idCardWorker) {
+      console.log('vendedor: ', message)
+      ioInstance.emit('finish-orderSeller:Server', message)
+      createNotificationSeller(message);
+    } else {
+      ioInstance.emit('finish-orderAdmin:Server', message);
+      createNotification(message);
+    }
   } else {
     console.error('IO instance not initialized!');
   }

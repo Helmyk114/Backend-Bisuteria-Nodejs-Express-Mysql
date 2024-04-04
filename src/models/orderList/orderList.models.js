@@ -1,3 +1,4 @@
+const { finishOrderAdmin } = require("../../config/Socket.io/ioEvent");
 const db = require("../../dataBase/db");
 const { updateStateOrderAllWorList } = require("../orders/order.model");
 
@@ -19,7 +20,7 @@ class OrderList {
   //Modelo para obtener todas las listas de trabajo asociado a una orden
   async orderList(idOrders) {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT O.idOrder, WL.idWorkList, WL.idState From orders O inner join orderList OL on O.idOrder = OL.idOrder inner join workList WL on OL.idWorkList = WL.idWorkList WHERE O.idOrder = ?';
+      const sql = 'SELECT O.idOrder, O.idCardWorker, WL.idWorkList, WL.idState, C.clientname From orders O inner join orderList OL on O.idOrder = OL.idOrder inner join workList WL on OL.idWorkList = WL.idWorkList inner join orderClient OC on O.idOrder = OC.idOrder inner join client C on OC. idCardClient = C.idCardClient WHERE O.idOrder = ?';
       const sqlValues = idOrders.map(idOrder => idOrder.idOrder);
       db.query(sql, sqlValues, async (err, results) => {
         if (err) {
@@ -28,6 +29,10 @@ class OrderList {
           const state = results.every(result => result.idState === 3);
           if (state) {
             try {
+              console.log('hola: ',results[0].clientname)
+              //Mostrar notificacion de que una orden esta terminada
+              finishOrderAdmin({ title:'Pedido terminado', message:`El pedido a nombre de ${results[0].clientname} ha sido terminado`})
+              finishOrderAdmin({ title:'Pedido terminado', message:`El pedido a nombre de ${results[0].clientname} ha sido terminado`, idCardWorker:`${results[0].idCardWorker}`})
               await updateStateOrderAllWorList(idOrders, '3');
               console.log('Estado de la orden actualizado correctamente');
             } catch (error) {

@@ -39,7 +39,16 @@ class NotificationModel {
   };
 
   async createNotificationSeller(notificationInfo) {
-    const sql = 'INSERT INTO notification (title, message, idCardWorker) VALUES (?,?,?)';
+    return new Promise((resolve, reject) => {
+      const sql = 'INSERT INTO notification (title, message, idCardWorker) VALUES (?,?,?)';
+      db.query(sql, Object.values(notificationInfo), (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
   };
 
   //Modelo pra obtener las notificationes según el trabajador
