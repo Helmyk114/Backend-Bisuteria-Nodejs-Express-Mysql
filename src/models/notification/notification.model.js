@@ -65,6 +65,20 @@ class NotificationModel {
     });
   };
 
+  //Modelo para eliminar una notificacion
+  async deleteNotification(idNotification) {
+    return new Promise((resolve, reject) => {
+      const sql = 'DELETE FROM notification WHERE idNotification = ?';
+      db.query(sql, idNotification, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  };
+
 }
 
 module.exports = new NotificationModel();

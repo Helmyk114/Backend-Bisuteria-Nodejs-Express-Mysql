@@ -45,10 +45,23 @@ async function getNotificationWorker(req, res) {
   }
 };
 
+//Controlador para eliminar una notificacion
+async function deleteNotification(req, res) {
+  try {
+    const { idNotification } = req.params;
+    const result = await NotificationModel.deleteNotification(idNotification);
+    res.json({ data: result });
+  } catch (error) {
+    console.error(error);
+    console.log({ data: `Internal Server Error (deleteNotification): ${error}` });
+  }
+};
+
 
 module.exports = {
   createNotification,
   createNotificationCraftman,
   createNotificationSeller,
-  getNotificationWorker
+  getNotificationWorker,
+  deleteNotification
 }
