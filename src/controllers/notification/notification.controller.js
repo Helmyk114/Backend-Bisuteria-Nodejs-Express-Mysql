@@ -11,7 +11,6 @@ async function createNotification(message) {
   }
 };
 
-
 //Controlador para insertar una notificación de artesano a la base de datos
 async function createNotificationCraftman(message) {
   try {
@@ -34,9 +33,22 @@ async function createNotificationSeller(message) {
   }
 };
 
+//Controlador para obtener las notificationes según el trabajador
+async function getNotificationWorker(req, res) {
+  try {
+    const { idCardWorker } = req.params; 
+    const result = await NotificationModel.getNotificationWorker(idCardWorker);
+    res.json({ data: result });
+  } catch (error) {
+    console.error(error);
+    console.log({ data: `Internal Server Error (getNotificationWorker): ${error}` });
+  }
+};
+
 
 module.exports = {
   createNotification,
   createNotificationCraftman,
-  createNotificationSeller
+  createNotificationSeller,
+  getNotificationWorker
 }

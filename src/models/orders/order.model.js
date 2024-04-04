@@ -160,9 +160,9 @@ class OrderModel {
           reject(err);
         } else {
           if (result.affectedRows === 0) {
-            reject({ message: `No se encontró ningún producto con ID: ${idOrders}` });
+            reject({ message: `No se encontró ninguna orden con ID: ${idOrders}` });
           } else {
-            resolve({ message: `Se ha actualizado el estado del producto con ID: ${idOrders}` });
+            resolve({ message: `Se ha actualizado el estado de la orden con ID: ${idOrders}` });
           }
         }
       });

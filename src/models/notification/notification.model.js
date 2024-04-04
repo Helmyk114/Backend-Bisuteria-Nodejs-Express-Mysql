@@ -42,6 +42,20 @@ class NotificationModel {
     const sql = 'INSERT INTO notification (title, message, idCardWorker) VALUES (?,?,?)';
   };
 
+  //Modelo pra obtener las notificationes según el trabajador
+  async getNotificationWorker(idCardWorker) {
+    return new Promise((resolve, reject) => {
+      const sql = 'SELECT  idNotification, title, message, DATE_FORMAT(orderDate, "%d/%m/%Y") AS fecha, TIME_FORMAT(orderDate, "%H:%i:%s") AS hora FROM notification WHERE idCardWorker = ? ORDER BY orderDate DESC';
+      db.query(sql, idCardWorker, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  };
+
 }
 
 module.exports = new NotificationModel();

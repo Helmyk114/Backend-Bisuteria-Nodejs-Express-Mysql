@@ -6,6 +6,7 @@ exports.initializeIO = (io) => {
   ioInstance = io;
 };
 
+//Función para emitir una notification cuando un usuario inicia sesión
 exports.loginIn = (message) => {
   if(ioInstance) {
     ioInstance.emit('login:Server', message);
@@ -14,6 +15,7 @@ exports.loginIn = (message) => {
   }
 };
 
+//Función para emitir una notification cuando se crea una orden
 exports.orders = (message) => {
   if(ioInstance) {
     ioInstance.emit('order:Server', message);
@@ -23,13 +25,17 @@ exports.orders = (message) => {
   }
 };
 
+
+//Función para emitir una notificación para listas de trabajo
 exports.listWork = (message) => {
   if (ioInstance) {
     if (message.idCardWorker) {
-      ioInstance.emit('payList:Server', message)
+      //Notificaión para pagar y crear una lista de trabajo
+      ioInstance.emit('create-payList:Server', message)
       createNotificationCraftman(message);
     } else {
-      ioInstance.emit('listWork:Server', message);
+      //Notificaión para terminar una lista de trabajo
+      ioInstance.emit('finish-listWork:Server', message);
       createNotification(message);
     }
   } else {
