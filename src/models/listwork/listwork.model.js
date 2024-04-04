@@ -44,7 +44,7 @@ class ListworkModel {
                           const infoQuantityArray = Object.values(maxQuantity);
                           maxQuantityUpdate(infoQuantityArray);
                           const info = await addMaxQuantity(detail.idOrder);
-                          if(info == 0) {
+                          if (info == 0) {
                             updateStateOrder(detail.idOrder, '2');
                           } else {
                             updateStateOrder(detail.idOrder, '7');
@@ -105,8 +105,22 @@ class ListworkModel {
     });
   };
 
+  //Modelo para obtener el nombre de una lista de trabajo segun su id
+  async getListworkName(idWorkList) {
+    return new Promise((resolve, reject) => {
+      const sql = 'SELECT  listName FROM workList WHERE idWorkList = ?';
+      db.query(sql, idWorkList, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  };
+
   //Modelo para cambiar el estado de una lista de trabajo
-  async updateStateWorkList(idWorkList, idState){
+  async updateStateWorkList(idWorkList, idState) {
     return new Promise((resolve, reject) => {
       const sql = 'UPDATE workList SET idstate = ? WHERE idWorkList = ?';
       const sqlValues = [idState, idWorkList];
@@ -126,8 +140,8 @@ class ListworkModel {
     });
   };
 
-   //Modelo para obtener el idCardWorker con el idWorkList
-   async getidCardWorkerListWork(idWorkList) {
+  //Modelo para obtener el idCardWorker con el idWorkList
+  async getidCardWorkerListWork(idWorkList) {
     return new Promise((resolve, reject) => {
       const sql = 'SELECT  idCardWorker FROM workList WHERE idWorkList = ?';
       db.query(sql, idWorkList, (err, result) => {

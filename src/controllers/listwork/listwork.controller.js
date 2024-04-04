@@ -82,11 +82,12 @@ async function updateStateWorkList(req,res) {
     if (result.affectedRows === 0) {
 			res.json({ data: 'Error' });
 		} else {
+      const nameList = await ListworkModel.getListworkName(idWorkList);
       if(idState == 8){
         const infoWorker = await ListworkModel.getidCardWorkerListWork(idWorkList)
-        listWork({ title:'Lista de Trabajo Pagada', message:`Se ha pagado la lista de trabajo: ${idWorkList}`, idCardWorker:infoWorker[0].idCardWorker})
+        listWork({ title:'Lista de Trabajo Pagada', message:`Se ha pagado la lista de trabajo: ${nameList[0].listName}`, idCardWorker:infoWorker[0].idCardWorker})
       } else {
-        listWork({ title:'Lista de Trabajo Terminada', message:`Se ha terminado la lista de trabajo: ${idWorkList}`})
+        listWork({ title:'Lista de Trabajo Terminada', message:`Se ha terminado la lista de trabajo: ${nameList[0].listName}`})
       }
 			res.json({ data: result });
 		}
